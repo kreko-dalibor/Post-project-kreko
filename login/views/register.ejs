@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdn.datatables.net/v/bs4/dt-2.1.8/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title><%= title %></title>
+</head>
+<body>
+<div class="container">
+    <% if (typeof message !== 'undefined') { %>
+        <div class="alert alert-<%= message.type %> alert-dismissible fade show" role="alert">
+            <strong><%= message.message %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary">
+                    <h3 class="text-light">Register</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/register" method="post">
+                        <div class="mb-3">
+                            <label for="name">Name</label>
+                            <input type="text" name="username" id="name" class="form-control form-control-lg" placeholder="Username" required autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" class="form-control form-control-lg" placeholder="Email" required>
+                        </div>
+                        <div class="mb-3 d-grid">
+                            <button class="btn btn-primary btn-lg" type="submit">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

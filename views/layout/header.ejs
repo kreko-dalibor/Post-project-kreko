@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.datatables.net/v/bs4/dt-2.1.8/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title><%= title %></title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a href="/home" class="navbar-brand"><i class="fas fa-code me-2"></i>Post_App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#my-nav" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="my-nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active">
+                        <a href="/home" class="nav-link"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/cars" class="nav-link"><i class="fa-solid fa-car"></i> Cars</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/contacts" class="nav-link"><i class="fa-solid fa-address-book"></i> Contacts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/accounts" class="nav-link"><i class="fa-solid fa-user"></i> Accounts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
