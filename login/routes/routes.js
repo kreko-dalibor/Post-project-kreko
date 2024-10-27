@@ -214,6 +214,81 @@ router.post('/update/:id', (req,res) => {
 })
 
 
+
+router.get("/update/acc/:id", (req,res) => {
+    let id = req.params.id
+    Account.findById(id, (err, account) => {
+        if(err){
+            res.redirect('/accounts')
+        } else {
+            if(account == null){
+                res.redirect('/accounts')
+            } else {
+                res.render("update_acc", {
+                    title: "Edit User",
+                    account: account,
+                })
+            }
+        }
+    })
+})
+
+// POST ruta za ažuriranje korisničkog naloga
+router.post('/update/acc/:id', (req, res) => {
+    let id = req.params.id;
+    
+    // Prvo pronađi korisnika u bazi
+    Account.findById(id, (err, account) => {
+        if (err) {
+            res.json({ message: err.message, type: 'danger' });
+        } else {
+            // Ako je nova lozinka uneta, hashuj je, a ako nije, koristi staru lozinku
+            if (req.body.password) {
+                bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+                    if (err) {
+                        res.json({ message: err.message, type: 'danger' });
+                    } else {
+                        // Ažuriraj korisničke podatke sa hashovanom lozinkom
+                        account.username = req.body.username;
+                        account.email = req.body.email;
+                        account.password = hashedPassword;
+
+                        account.save((err) => {
+                            if (err) {
+                                res.json({ message: err.message, type: 'danger' });
+                            } else {
+                                req.session.message = {
+                                    type: 'success',
+                                    message: 'User updated successfully!',
+                                };
+                                res.redirect('/accounts');
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Ako lozinka nije promenjena, samo ažuriraj username i email
+                account.username = req.body.username;
+                account.email = req.body.email;
+
+                account.save((err) => {
+                    if (err) {
+                        res.json({ message: err.message, type: 'danger' });
+                    } else {
+                        req.session.message = {
+                            type: 'success',
+                            message: 'User updated successfully!',
+                        };
+                        res.redirect('/accounts');
+                    }
+                });
+            }
+        }
+    });
+});
+
+
+
 router.get('/delete/:id', (req, res) => {
     let id = req.params.id
 
@@ -245,6 +320,8 @@ router.get('/delete/acc/:id', (req, res) => {
         }
     })
 })
+
+
 
 router.get('/accounts', (req,res) => {
     Account.find().exec((err,accounts) => {
@@ -461,13 +538,7 @@ router.get('/logout', (req, res) => {
 
 
 
-
-
-
-
-
-
-
+//----------------POST-------------------------------------------
 
 
 module.exports = router

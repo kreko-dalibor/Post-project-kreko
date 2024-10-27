@@ -1,11 +1,46 @@
 <%- include('layout/header') %>
-    <div style="width: 1000px;
-  	margin: 0 auto;">
-        <h2 style="margin: 0;
-        padding: 25px 0;
-        font-size: 22px;
-        border-bottom: 1px solid #ebebeb;
-        color: #666666;">Home</h2>
-        <p>Welcome to the home page!</p>
+<div class="container my-5">
+    <h2>Home</h2>
+    <hr>
+    <p>Welcome to the home page!</p>
+</div>
+
+<div class="container mt-4">
+    <h2 class="my-4">All Posts</h2>
+    <div class="row">
+        <% posts.forEach(post => { %>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="row g-0 d-flex align-items-stretch"> <!-- Dodano d-flex i align-items-stretch -->
+                        <div class="col-md-4"> 
+                            <img src="/uploads/<%= post.image %>" class="img-fluid rounded-start" alt="Post image" style="height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-8 d-flex flex-column"> <!-- Flex kolona za tekst -->
+                            <div class="card-body d-flex flex-column"> <!-- Flex za podešavanje teksta -->
+                                <h5 class="card-title"><%= post.title %></h5>
+                                <p class="card-text flex-grow-1"><%= post.description %></p> <!-- Flex-grow da popuni prostor -->
+                                <p class="card-text"><small class="text-muted">Created at: <%= post.createdAt.toDateString() %></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
     </div>
+</div>
+
+<style>
+    .card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-body {
+    padding: 15px; /* Uvećanje unutrašnjeg razmaka */
+}
+
+</style>
 <%- include('layout/footer') %>

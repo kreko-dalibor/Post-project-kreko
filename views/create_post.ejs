@@ -1,0 +1,38 @@
+<%- include('layout/header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary">
+                    <h3 class="text-light">Add New Post</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/post" method="POST" id="add-form" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title">Title</label>
+                            <input type="text" name="title" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc">Description</label>
+                            <input type="text" name="desc" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="img">Select Image:</label>
+                            <input type="file" name="img" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="created">Created</label>
+                            <input type="date" name="created" class="form-control form-control-lg" disabled>
+                        </div>
+                        <div class="mb-3 d-grid">
+                            <input type="submit" name="submit" class="btn btn-primary btn-lg" value="Add New Post">
+                        </div>
+                    </form>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('layout/footer') %>

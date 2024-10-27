@@ -14,4 +14,4 @@ const accScema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Acc", accScema)
+module.exports = mongoose.model("Account", accScema)

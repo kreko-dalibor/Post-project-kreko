@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/users')
 const Car = require('../models/cars')
 const Account = require('../models/accounts')
+const Post = require('../models/Post')
 const multer = require('multer')
 const fs = require('fs')
 
@@ -125,9 +126,9 @@ router.post('/car/update/:id', (req,res) => {
 //------------------------------------------------------------------------------------
 
 
-router.get('/home', (req,res) => {
-    res.render('home', { title: 'Home Page' })
-})
+// router.get('/home', (req,res) => {
+//     res.render('home', { title: 'Home Page' })
+// })
 
 router.get('/contacts', (req,res) => {
     User.find().exec((err,users) => {
@@ -366,6 +367,61 @@ const validateEmail = (email) => {
     return regex.test(email);
 };
 
+router.post('/acc/register', async (req, res) => {
+    const { username, password, email } = req.body;
+    
+    if (!username || !password || !email) {
+        req.session.message = {
+            type: 'danger',
+            message: 'All fields are required!'
+        };
+        return res.redirect('/acc/register');
+    }
+
+    // Check if email is valid
+    if (!validateEmail(email)) {
+        req.session.message = {
+            type: 'danger',
+            message: 'Please enter a valid email address!'
+        };
+        return res.redirect('/acc/register');
+    }
+
+    try {
+        // First, check if the username already exists in the database
+        const existingUser = await Account.findOne({ username });
+        if (existingUser) {
+            req.session.message = {
+                type: 'danger',
+                message: 'Username already exists!'
+            };
+            return res.redirect('/acc/register');
+        }
+
+        // Hash the password with bcrypt
+        const salt = await bcrypt.genSalt(10); // Generate salt
+        const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
+
+        // Create a new account with hashed password
+        const acc = new Account({
+            username,
+            password: hashedPassword,  // Save the hashed password
+            email,
+        });
+
+        // Save the new account
+        await acc.save();
+
+        req.session.message = {
+            type: 'success',
+            message: 'User added successfully!'
+        };
+        res.redirect('/accounts');
+    } catch (err) {
+        res.json({ message: err.message, type: 'danger' });
+    }
+});
+
 router.post('/register', async (req, res) => {
     const { username, password, email } = req.body;
 
@@ -416,61 +472,6 @@ router.post('/register', async (req, res) => {
             message: 'User added successfully!'
         };
         res.redirect('/');
-    } catch (err) {
-        res.json({ message: err.message, type: 'danger' });
-    }
-});
-
-router.post('/acc/register', async (req, res) => {
-    const { username, password, email } = req.body;
-
-    if (!username || !password || !email) {
-        req.session.message = {
-            type: 'danger',
-            message: 'All fields are required!'
-        };
-        return res.redirect('/acc/register');
-    }
-
-    // Check if email is valid
-    if (!validateEmail(email)) {
-        req.session.message = {
-            type: 'danger',
-            message: 'Please enter a valid email address!'
-        };
-        return res.redirect('/acc/register');
-    }
-
-    try {
-        // First, check if the username already exists in the database
-        const existingUser = await Account.findOne({ username });
-        if (existingUser) {
-            req.session.message = {
-                type: 'danger',
-                message: 'Username already exists!'
-            };
-            return res.redirect('/acc/register');
-        }
-
-        // Hash the password with bcrypt
-        const salt = await bcrypt.genSalt(10); // Generate salt
-        const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
-
-        // Create a new account with hashed password
-        const acc = new Account({
-            username,
-            password: hashedPassword,  // Save the hashed password
-            email,
-        });
-
-        // Save the new account
-        await acc.save();
-
-        req.session.message = {
-            type: 'success',
-            message: 'User added successfully!'
-        };
-        res.redirect('/accounts');
     } catch (err) {
         res.json({ message: err.message, type: 'danger' });
     }
@@ -533,6 +534,66 @@ router.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
+
+
+//----------------POST-------------------------------------------
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads'); // Gde će slike biti smeštene
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Dodeljivanje jedinstvenog imena
+    }
+});
+
+const upload = multer({ storage: storage });
+
+router.get('/post', (req,res) => {
+    res.render('create_post', { title: "Create Post" })
+})
+
+router.post('/post',upload.single('img'), (req, res) => {   console.log(req.file); 
+    const post = new Post({
+        title: req.body.title,
+        description: req.body.desc,
+        image: req.file.filename,
+        createdAt: new Date(),
+    }); console.log(post)
+
+    post.save((err) => {
+        if (err) {
+            res.json({ message: err.message, type: "danger" });
+        } else {
+            req.session.message = {
+                type: 'success',
+                message: 'Post posted successfully!'
+            };
+            res.redirect('/home');
+        }
+    });
+
+})
+
+//===============================================================================
+router.get('/home', (req, res) => {
+    Post.find().exec((err, posts) => {
+        if (err) {
+            return res.json({ message: err.message });
+        }
+        
+        res.render('home', {
+            title: 'Post Page',
+            posts: posts
+        });
+    });
+});
+
+
+
+
+
+
 
 
 
